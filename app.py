@@ -5,12 +5,29 @@ import streamlit as st
 import io
 import matplotlib.pyplot as plt
 import matplotlib
+import os
+import matplotlib.font_manager as fm
 
 # =================== 页面及后台绘图字体配置 ===================
 st.set_page_config(page_title="混合岩石流变强度计算器", layout="wide")
 
-# 设置 Matplotlib 后台生成的图片字体，避免中文乱码
-matplotlib.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS', 'Microsoft YaHei', 'sans-serif']
+
+
+# =================== 页面及后台绘图字体配置 ===================
+st.set_page_config(page_title="混合岩石流变强度计算器", layout="wide")
+
+# 核心修复：强制云端加载当前目录下的中文字体文件
+font_path = "simhei.ttf"  # 确保这里的文件名和 GitHub 上传的完全一致（区分大小写）
+if os.path.exists(font_path):
+    # 将字体注册到 matplotlib 中
+    fm.fontManager.addfont(font_path)
+    # 获取字体的标准内部名称并应用
+    prop = fm.FontProperties(fname=font_path)
+    matplotlib.rcParams['font.sans-serif'] = [prop.get_name(), 'sans-serif']
+else:
+    # 本地运行时的备用方案
+    matplotlib.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS', 'Microsoft YaHei', 'sans-serif']
+
 matplotlib.rcParams['axes.unicode_minus'] = False
 
 st.title("🪨 混合岩石流变强度计算器")
